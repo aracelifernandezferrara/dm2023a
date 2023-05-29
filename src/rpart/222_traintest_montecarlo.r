@@ -5,8 +5,8 @@ require("data.table")
 require("rpart")
 require("parallel")
 
-#cambiamos por nuestras semillas:
-ksemillas  <- c(106391, 106397, 106411, 106417, 106427) #reemplazar por las propias semillas
+#cambiamos por nuestras semillas:hago el ejercicio con las 20 semillas
+ksemillas  <- c(121661, 121687, 121697, 121711, 121721, 121727, 121763, 121787, 121789, 121843, 121853, 121867, 121883, 121889, 121909, 121921, 121931, 121937,121938,121939) #reemplazar por las propias semillas
 
 #------------------------------------------------------------------------------
 #particionar agrega una columna llamada fold a un dataset que consiste en una particion estratificada segun agrupa
@@ -62,11 +62,11 @@ ArbolEstimarGanancia  <- function( semilla, param_basicos )
 #------------------------------------------------------------------------------
 
 #Aqui se debe poner la carpeta de la computadora local
-setwd("X:\\gdrive\\ITBA2023a\\")  #Establezco el Working Directory
+setwd("C:/Mineria_de_datos/")  #Establezco el Working Directory
 #cargo los datos
 
 #cargo los datos
-dataset  <- fread("./datasets/dataset_pequeno.csv")
+dataset  <- fread("C:/Mineria_de_datos/datasets/dataset_pequeno.csv")
 
 #trabajo solo con los datos con clase, es decir 202107
 dataset  <- dataset[ clase_ternaria!= "" ]

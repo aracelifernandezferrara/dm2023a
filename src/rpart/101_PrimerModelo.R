@@ -7,10 +7,10 @@ require("rpart")
 require("rpart.plot")
 
 #Aqui se debe poner la carpeta de la materia de SU computadora local
-setwd("X:\\gdrive\\ITBA2023a\\")  #Establezco el Working Directory
+setwd("C:/Mineria_de_datos/")  #Establezco el Working Directory
 
 #cargo el dataset
-dataset  <- fread("./datasets/dataset_pequeno.csv")
+dataset  <- fread("C:/Mineria_de_datos/datasets/dataset_pequeno.csv")
 
 dtrain  <- dataset[ foto_mes==202107 ]  #defino donde voy a entrenar
 dapply  <- dataset[ foto_mes==202109 ]  #defino donde voy a aplicar el modelo
@@ -20,9 +20,9 @@ modelo  <- rpart(formula=   "clase_ternaria ~ .",  #quiero predecir clase_ternar
                  data=      dtrain,  #los datos donde voy a entrenar
                  xval=      0,
                  cp=       -1,     #esto significa no limitar la complejidad de los splits
-                 minsplit=  0,     #minima cantidad de registros para que se haga el split
-                 minbucket= 1,     #tamaño minimo de una hoja
-                 maxdepth=  3 )    #profundidad maxima del arbol
+                 minsplit=  600,     #minima cantidad de registros para que se haga el split. 0 no es performante
+                 minbucket= 15,     #tamaño minimo de una hoja,
+                 maxdepth=  8)    #profundidad maxima del arbol, cuantos pisos tiene
 
 
 #grafico el arbol
@@ -40,14 +40,14 @@ prediccion  <- predict( object= modelo,
 #agrego a dapply una columna nueva que es la probabilidad de BAJA+2
 dapply[ , prob_baja2 := prediccion[, "BAJA+2"] ]
 
-#solo le envio estimulo a los registros con probabilidad de BAJA+2 mayor  a  1/40
+#solo le envio estimulo a los registros con probabilidad de BAJA+2 mayor  a  1/40 que es lo mismo que 0.025
 dapply[ , Predicted := as.numeric( prob_baja2 > 1/40 ) ]
 
 #genero el archivo para Kaggle
 #primero creo la carpeta donde va el experimento
-dir.create( "./exp/" )
-dir.create( "./exp/KA2001" )
+#dir.create( "./exp/" )
+#dir.create( "./exp/Gridsearch" )
 
 fwrite( dapply[ , list(numero_de_cliente, Predicted) ], #solo los campos para Kaggle
-        file= "./exp/KA2001/K101_001.csv",
+        file= "./exp/Gridsearch/K101_006.csv",
         sep=  "," )
